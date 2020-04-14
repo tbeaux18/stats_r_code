@@ -21,6 +21,23 @@ chisq.test(table(hand_season_data))
 # Cleaning data, imputing missing data, and building regression model
 library(mice)
 
+# testing for significant predictors
+testdata <- data %>%
+  select(Gender, Ageyears, Height_cm, Armspan_cm, Footlength_cm, Left_Footlength_cm, Index_Fingerlength_mm, Ring_Fingerlength_mm) %>%
+  mutate(
+    Height_cm = str_replace(Height_cm, '\'|/', '.'),
+    Height_cm = parse_number(Height_cm),
+    Armspan_cm = parse_number(Armspan_cm),
+    Footlength_cm = parse_number(Footlength_cm),
+    Left_Footlength_cm = parse_number(Left_Footlength_cm),
+    Index_Fingerlength_mm = parse_number(Index_Fingerlength_mm),
+    Ring_Fingerlength_mm = parse_number(Ring_Fingerlength_mm)
+  )
+
+summary(lm(Height_cm ~ ., data=testdata))
+summary(lm(Armspan_cm ~ ., data=testdata))
+
+
 # creating new dataframe that includes variables that will help in the imputation of height and armspan
 # replacing miscellaneous characters with a period to perform later calculations
 # using parse_number function from readr/tidy in order to standardize the numeric data
